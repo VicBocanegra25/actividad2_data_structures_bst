@@ -6,6 +6,7 @@ Se implementan operaciones de inserción, borrado, tres recorridos (inorder, pre
 */
 
 
+import java.awt.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
@@ -205,12 +206,12 @@ public class Arbol {
         while (true) {
             // Si el árbol está vacío o se llegó al final del recorrido sin encontrarlo
             if (actual == null) {
-                System.out.println("No se encontró el elemento. ");
+                System.out.println("No se encontró el elemento. \n");
                 return false;
             }
             // En este caso sí se encontró al elemento
             else if (actual.dato == _data) {
-                System.out.println("Se encontró al elemento. ");
+                System.out.println("Se encontró al elemento. \n");
                 return true;
             }
             // Si el elemento actual es mayor que el elemento a buscar, nos vamos hacia la izquierda
@@ -253,5 +254,138 @@ public class Arbol {
             actual = actual.hijoDerecho;
         }
         return actual.dato;
+    }
+
+    /* La función borrar() considera tres casos: 1) Cuando el nodo a borrar no tiene hijos. 2) Cuando el nodo a borrar
+    tiene sólo un hijo. 3) Cuando el nodo a borrar tiene dos hijos.
+    En cualquier caso, es necesario determinar cuál es el nodo padre del nodo a eliminar, por ello, se implementa una función
+    auxiliar llamada: nodosPadreActual() que nos otorgará la referencia al nodo actual y al nodo padre.
+    Esto es necesario porque en los casos donde el nodo a borrar tiene hijos, se debe determinar un nodo sucesor y realizar
+    la sustitución del nodo a borrar (el nodo padre de el nodo actual ahora será el nodo padre del hijo del que se borra).
+    *
+    params:
+        int data: El valor que contiene el nodo actual
+    returns:
+        NodoPadreActual: Una tupa de nodos: El padre y el actual.
+    */
+    public NodoPadreActual nodosPadreActual(int data) {
+        // Inicializamos ambas referencias a los nodos, padre es nulo en estos momentos
+        Nodo padre = null;
+        Nodo actual = this.nodoRaiz;
+
+        if (actual == null) {
+            return new NodoPadreActual(padre, null);
+        }
+        // Recorremos todo el árbol en busca del nodo actual (El que contiene el dato que buscamos)
+        while (true) {
+            if (actual.dato == data) {
+                return new NodoPadreActual(padre, actual);
+            } else if (actual.dato > data) {
+                padre = actual;
+                actual = actual.hijoIzquierdo;
+            } else {
+                padre = actual;
+                actual = actual.hijoDerecho;
+            }
+        }
+    }
+    /* La operación borrar() hace uso de la operación nodosPadreActual para tener una referencia del nodo a borrar y de su
+    nodo padre.
+    params:
+        int data: El valor del nodo a borrar
+    returns:
+        boolean: true si todo salió en orden, false si no se pudo borrar el nodo
+    * */
+
+    public boolean borrar(int data){
+        // En la variable nodos, se encuentran el nodo padre y el actual
+        NodoPadreActual nodos = nodosPadreActual(data);
+        // Si no existen referencias al nodo padre y al actual (el que vamos a borrar)
+        if (nodos.padre == null && nodos.actual == null){
+            return false;
+        }
+        // Es necesario llevar la cuenta de cuántos hijos tiene el nodo a borrar
+        int numeroHijos = 0;
+        // Si el nodo a borrar tiene tanto hijo izquierdo, como derecho, entonces nos encontramos con el caso 2
+        if (nodos.actual.hijoIzquierdo != null && nodos.actual.hijoDerecho != null){
+            numeroHijos = 2;
+        } else if (nodos.actual.hijoIzquierdo == null && nodos.actual.hijoDerecho == null){
+            numeroHijos = 0; // Los punteros a los hijos son nulos, por lo tanto, el nodo a borrar no tiene hijos (caso 1)
+        } else {
+            // Cualquier otra combinación quiere decir que el nodo cuenta con un solo hijo
+            numeroHijos = 1;
+        }
+        // Primer caso, el nodo a borrar no tiene hijos
+        switch (numeroHijos){
+            case 0:
+                // Es posible que el nodo a borrar sea la raíz
+                if (nodos.padre != null){
+                    // Si el nodo a borrar está en un subárbol derecho
+                    if (nodos.padre.hijoDerecho == nodos.actual){
+                        nodos.padre.hijoDerecho = null;
+                    }
+                } else {
+                    nodos.padre.hijoIzquierdo = null;
+                    // Si el nodo a borrar no tiene padre, entonces estamos frente al nodo raíz y para borrarlo, apuntamos a null
+                    this.nodoRaiz = null;
+                }
+                break;
+            case 1:
+                // siguienteNodo es una referencia al hijo del nodo que vamos a eliminar
+                Nodo siguienteNodo = null;
+                if (nodos.actual.hijoIzquierdo != null){
+                    siguienteNodo = nodos.actual.hijoIzquierdo;
+                } else {
+                    siguienteNodo = nodos.actual.hijoDerecho;
+                }
+                // En caso de que se quiera borrar la raíz, pero esta sí tenga un hijo
+                if (nodos.padre != null){
+                    if (nodos.padre.hijoIzquierdo == nodos.actual){
+                        nodos.padre.hijoIzquierdo = siguienteNodo;
+                    } else {
+                        nodos.padre.hijoDerecho = siguienteNodo;
+                    }
+                } else {
+                    this.nodoRaiz = siguienteNodo;
+                }
+                break;
+            case 2:
+                // Cuando se quiere eliminar un nodo con dos hijos, se debe buscar un sucesor utilizando un recorrido in-order
+                Nodo padreNodoMasIzquierda = nodos.actual;
+                Nodo nodoMasIzquierda = nodos.actual.hijoDerecho;
+                // Necesitamos encontrar el el nodo cuyo valor sea más pequeño dentro del subarbol derecho
+                while (nodoMasIzquierda.hijoIzquierdo != null){
+                    padreNodoMasIzquierda = nodoMasIzquierda;
+                    nodoMasIzquierda = nodoMasIzquierda.hijoIzquierdo;
+                }
+                // Se actualiza el valor del nodo que está a punto de ser eliminado con el sucesor
+                nodos.actual.dato = nodoMasIzquierda.dato;
+                if (padreNodoMasIzquierda.hijoIzquierdo == nodoMasIzquierda){
+                    padreNodoMasIzquierda.hijoIzquierdo = nodoMasIzquierda.hijoDerecho;
+                } else {
+                    padreNodoMasIzquierda.hijoDerecho = nodoMasIzquierda.hijoDerecho;
+                }
+        }
+        return true;
+    }
+
+    /* Las siguientes funciones displayTree() y display() son funciones auxiliares que nos permiten desplegar los árboles
+    en forma gráfica (impresos en la consola). Se utilizarán simplemente para debuggear y para mostrar las operaciones de
+    borrado y el efecto que tienen en los árboles que creemos.
+    displayTree() no recibe parámetros, pero regresa un objeto StringBuilder.
+    display() recibe un nodo(la raíz), una profundidad y una posición inicial.
+    * */
+    public String displayTree() {
+        StringBuilder sb = new StringBuilder();
+        display(this.nodoRaiz, 0, "Raíz");
+        return sb.toString();
+    }
+    public void display(Nodo node, int depth, String position) {
+        if (node != null) {
+            display(node.hijoDerecho, depth + 1, "Derecho");
+            String padding = new String(new char[depth * 4]).replace('\0', ' ');
+            System.out.println(padding + (position.equals("Raíz") ? "" : (position + " ")) + node.dato);
+            display(node.hijoIzquierdo, depth + 1, "Izquierdo");
+        }
     }
 }
