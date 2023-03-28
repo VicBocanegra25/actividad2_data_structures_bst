@@ -1,6 +1,6 @@
 # actividad2_data_structures_bst
 
-Repositorio para el proyecto de Binary Search Tree en Java para la materia de Estructura de Datos. Se implementa un árbol de búsqueda binario.
+Repositorio para el proyecto de Binary Search Tree en Java para la materia de Estructura de Datos. Se implementa un árbol de búsqueda binario. Trabajamos con datos del tipo entero. 
 
 ## Descripción de la actividad
 
@@ -15,7 +15,8 @@ Además, se debe incluir una clase de prueba que permita comprobar el correcto f
 
 ## Los archivos
 
-Se implementan dos clases:
+Se implementan tres clases:
 
-1. La clase Arbol.java que implementa la estructura de datos y las operaciones a realizar.
-2. La clase Main.java, que contiene el instanciamiento de la clase arbol.java y aquí mismo se prueba la inserción de nodos, impresión, recorrido y borrado de nodos.
+1. La clase **Arbol.java** que implementa la estructura de datos y las operaciones a realizar.
+2. La clase **Nodo.java** que sirve para almacenar los datos y los punteros
+3. La clase **Main.java**, que contiene el instanciamiento de la clase arbol.java y aquí mismo se prueba la inserción de nodos, impresión, recorrido y borrado de nodos.
