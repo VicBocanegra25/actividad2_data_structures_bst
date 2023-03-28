@@ -24,4 +24,4 @@ Se implementan tres clases:
 2. La clase **Nodo.java** que sirve para almacenar los datos y los punteros
 3. La clase **Main.java**, que contiene el instanciamiento de la clase arbol.java y aquí mismo se prueba la inserción de nodos, impresión, recorrido y borrado de nodos. Además de la búsqueda e impresión de mínimos y máximos. 
 
-**Los archivos se encuentran dentro de la carpeta actividad2_data_structures_bst/Tree/src/**
+**Los archivos se encuentran dentro de la carpeta actividad2_data_structures_bst/arbol/src/**
