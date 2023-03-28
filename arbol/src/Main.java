@@ -1,8 +1,8 @@
 import java.util.ArrayList;
 
 /* La clase Main() nos permitirá probar las operaciones del árbol de búsqueda binario.
-* Primero instanciamos la clase Arbol.java y generamos un objeto del tipo Arbol(), al cual le insertaremos elementos.
-* */
+ * Primero instanciamos la clase Arbol.java y generamos un objeto del tipo Arbol(), al cual le insertaremos elementos.
+ * */
 public class Main {
     public static void main(String[] args) {
         System.out.println("Vamos a generar un Árbol de Búsqueda Binario.\n");
@@ -39,5 +39,15 @@ public class Main {
         arbol.imprimir(0); // inorder
         arbol.imprimir(1); // preorder
         arbol.imprimir(2); // postorder
+
+        // Realizamos la búsqueda de los elementos en el árbol
+        System.out.println("\nBuscamos si existen los números del 1 al 10 en el árbol: \n");
+        for (int i = 0; i < 11; i++){
+            System.out.printf("%d - %b\n", i, arbol.busqueda(i));
+        }
+
+        // Imprimimos los nodos más grandes y más pequeños del árbol
+        System.out.printf("\nEl nodo más pequeño en el árbol contiene el valor: %d\n", arbol.valorMinimo());
+        System.out.printf("El nodo más grande en el árbol contiene el valor: %d", arbol.valorMaximo());
     }
 }

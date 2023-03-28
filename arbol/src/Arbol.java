@@ -189,4 +189,69 @@ public class Arbol {
         }
         System.out.println(orden);
     }
+
+    /*BONUS: Función de búsqueda.
+     * El árbol binario de búsqueda debe implementar una función que nos permita encontrar un elemento en la estructura.
+     * Se practica un recorrido haciendo comparaciones entre el elemento a buscar y el elemento actual.
+     * @parms:
+     *   int _data: El elemento a encontrar ( se corrobora si existe o no )
+     * @returns:
+     *   boolean: Un booleano true/false dependiendo del resultado de las comparaciones
+     * */
+    public boolean busqueda(int _data) {
+        // Nos servirá para atravesar el nodo y realizar comparaciones
+        Nodo actual = this.nodoRaiz;
+        // Realizamos el recorrido del árbol en busca del elemento solicitado
+        while (true) {
+            // Si el árbol está vacío o se llegó al final del recorrido sin encontrarlo
+            if (actual == null) {
+                System.out.println("No se encontró el elemento. ");
+                return false;
+            }
+            // En este caso sí se encontró al elemento
+            else if (actual.dato == _data) {
+                System.out.println("Se encontró al elemento. ");
+                return true;
+            }
+            // Si el elemento actual es mayor que el elemento a buscar, nos vamos hacia la izquierda
+            else if (actual.dato > _data) {
+                actual = actual.hijoIzquierdo;
+            } else {
+                actual = actual.hijoDerecho;
+            }
+        }
+    }
+
+    /* BONUS. Las funciones valorMinimo y valorMaximo nos permiten encontrar los elementos más grandes o más pequeños
+    * en el árbol. Gracias a las propiedades del BTS, basta con recorrer el árbol hasta la izquierda (para el pequeño) o
+    * hasta la derecha (para el mayor).
+    * params:
+    *   Ninguno
+    * returns:
+    *   int: el valor más grande o el más pequeño respectivamente
+    * */
+    public int valorMinimo() {
+        Nodo actual = this.nodoRaiz;
+        // Lanzamos una excepción si el usuario intenta llamar esta función en un árbol vacío
+        if (actual == null) {
+            throw new IllegalStateException("The tree is empty");
+        }
+        // Recorremos el árbol hasta llegar al que está más a la izquierda
+        while (actual.hijoIzquierdo != null) {
+            actual = actual.hijoIzquierdo;
+        }
+        return actual.dato;
+    }
+    public int valorMaximo() {
+        Nodo actual = this.nodoRaiz;
+        // Lanzamos una excepción si el usuario intenta llamar esta función en un árbol vacío
+        if (actual == null) {
+            throw new IllegalStateException("The tree is empty");
+        }
+        // Recorremos el árbol hasta llegar al que está más a la derecha
+        while (actual.hijoDerecho != null) {
+            actual = actual.hijoDerecho;
+        }
+        return actual.dato;
+    }
 }
