@@ -388,4 +388,9 @@ public class Arbol {
             display(node.hijoIzquierdo, depth + 1, "Izquierdo");
         }
     }
+
+    /* La función vaciar() resetea el árbol (lo vacía) al colocar la raíz en null*/
+    public void vaciar(){
+        this.nodoRaiz = null;
+    }
 }

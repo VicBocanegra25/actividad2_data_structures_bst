@@ -81,6 +81,48 @@ public class Main {
         arbol.busqueda(2);
         System.out.println(arbol.displayTree());
 
+        // Probando un árbol mal balanceado
+        int[] arrayOrdenado = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30};
+        System.out.println("Probaremos creando un árbol mal balanceado");
+        Arbol arbolMalBalanceado = new Arbol();
+        for (int element : arrayOrdenado) {
+            arbolMalBalanceado.insertar(element);
+        }
+        System.out.println(arbolMalBalanceado.displayTree());
 
+        System.out.println("\nProbaremos ahora con un árbol balanceado");
+        Arbol arbolBalanceado = new Arbol();
+        ArrayList<Integer> elementosMedio = elementoMedio(arrayOrdenado, 0, arrayOrdenado.length - 1);
+        for (int element : elementosMedio) {
+            arbolBalanceado.insertar(element);
+        }
+        System.out.println(arbolBalanceado.displayTree());
+
+    }
+
+    /* Función auxiliar que nos permite buscar un orden óptimo para un array ordenado. Esto resuelve el problema de insertar
+    los nodos en el árbol de forma secuencial, lo que nos daría una lista enlazada, en lugar de un ABB.
+    Utiliza un acercamiento recursivo para ordenar los subarrays.
+    params:
+        ArrayList arrayOrdenado: El array que contiene datos en forma secuencial.
+        int inicial: La posición inicial del array (se utiliza para obtener el valor medio mediante la operación fin-inicial / 2
+        int fin: La posición final del array y de los subarrays.
+    returns:
+        ArrayList elementosMedio: Un array en el orden óptimo para insertar los elementos en un árbol.
+    * */
+    public static ArrayList<Integer> elementoMedio(int[] arrayOrdenado, int inicial, int fin) {
+        ArrayList<Integer> elementosMedio = new ArrayList<>();
+
+        if (inicial > fin) {
+            return elementosMedio;
+        }
+
+        int medio = inicial + (fin - inicial) / 2;
+        elementosMedio.add(arrayOrdenado[medio]);
+
+        elementosMedio.addAll(elementoMedio(arrayOrdenado, inicial, medio - 1));
+        elementosMedio.addAll(elementoMedio(arrayOrdenado, medio + 1, fin));
+
+        return elementosMedio;
     }
 }
